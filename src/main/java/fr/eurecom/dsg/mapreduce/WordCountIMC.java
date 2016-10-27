@@ -3,6 +3,7 @@ package fr.eurecom.dsg.mapreduce;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 import org.apache.hadoop.conf.Configuration;
@@ -105,7 +106,7 @@ class WCIMCMapper extends Mapper<Object, // TODO: change Object to input key
         }
         Iterator it = counter.entrySet().iterator();
         while (it.hasNext()) {
-            HashMap.Entry pair = (HashMap.Entry)it.next();
+            Map.Entry pair = (Map.Entry)it.next();
             word.set((String)pair.getKey());
             result = new IntWritable((Integer)pair.getValue());
             context.write(word, result);
