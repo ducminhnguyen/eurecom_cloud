@@ -48,9 +48,9 @@ public class WordCountIMC extends Configured implements Tool {
 
         job = Job.getInstance(conf, "word count");
         job.setJarByClass(WordCount.class);
-        job.setMapperClass(WCMapper.class);
+        job.setMapperClass(WCIMCMapper.class);
 
-        job.setReducerClass(WCReducer.class);
+        job.setReducerClass(WCIMCReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
         job.setNumReduceTasks(Integer.parseInt(args[0]));

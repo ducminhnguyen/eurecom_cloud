@@ -51,7 +51,6 @@ public class WordCount extends Configured implements Tool {
         job = Job.getInstance(conf, "word count");
         job.setJarByClass(WordCount.class);
         job.setMapperClass(WCMapper.class);
-
         job.setReducerClass(WCReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
