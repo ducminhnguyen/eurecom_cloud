@@ -33,7 +33,7 @@ public class WordCount extends Configured implements Tool {
 
 
     @Override
-    public int run(String[] args) throws Exception {
+    public int run(String[] args) throws Exception  {
 
         Configuration conf = this.getConf();
         Job job = null; // TODO: define new job instead of null using conf
@@ -55,8 +55,9 @@ public class WordCount extends Configured implements Tool {
         job.setReducerClass(WCReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
-        FileInputFormat.addInputPath(job, new Path(args[0]));
-        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+        job.setNumReduceTasks(Integer.parseInt(args[0]));
+        FileInputFormat.addInputPath(job, new Path(args[1]));
+        FileOutputFormat.setOutputPath(job, new Path(args[2]));
         System.exit(job.waitForCompletion(true) ? 0 : 1);
         return job.waitForCompletion(true) ? 0 : 1; // this will execute the job
     }
@@ -71,7 +72,7 @@ public class WordCount extends Configured implements Tool {
         this.outputDir = new Path(args[2]);
     }
 
-    public static void main(String args[]) throws Exception {
+    public static void main(String args[]) throws Exception  {
         int res = ToolRunner.run(new Configuration(), new WordCount(args), args);
         System.exit(res);
     }
