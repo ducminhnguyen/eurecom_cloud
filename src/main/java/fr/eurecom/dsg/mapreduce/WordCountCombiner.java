@@ -54,10 +54,10 @@ public class WordCountCombiner extends Configured implements Tool {
         job.setCombinerClass(WCReducerCombiner.class); //
         job.setReducerClass(WCReducerCombiner.class);
         job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(IntWritable.class);
-        job.setNumReduceTasks(Integer.parseInt(args[0]));
-        FileInputFormat.addInputPath(job, new Path(args[1]));
-        FileOutputFormat.setOutputPath(job, new Path(args[2]));
+        job.setOutputValueClass(LongWritable.class);
+        job.setNumReduceTasks(numReducers);
+        FileInputFormat.addInputPath(job, inputPath);
+        FileOutputFormat.setOutputPath(job, outputDir);
         System.exit(job.waitForCompletion(true) ? 0 : 1);
 
 		return job.waitForCompletion(true) ? 0 : 1; // this will execute the job
