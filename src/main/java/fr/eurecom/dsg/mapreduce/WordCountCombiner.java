@@ -6,12 +6,15 @@ import java.util.StringTokenizer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.Mapper.Context;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
@@ -29,7 +32,8 @@ public class WordCountCombiner extends Configured implements Tool {
 
   @Override
 	public int run(String[] args) throws Exception {
-    
+
+        Configuration conf = this.getConf();
 		Job job = null; // TODO: define new job instead of null using conf e setting a name
 		
 		// TODO: set job input format
@@ -43,6 +47,18 @@ public class WordCountCombiner extends Configured implements Tool {
 		// TODO: set the output path for the job results (to HDFS)
 		// TODO: set the number of reducers. This is optional and by default is 1
 		// TODO: set the jar class
+
+        job = Job.getInstance(conf, "word count");
+        job.setJarByClass(WordCount.class);
+        job.setMapperClass(WCMapperCombiner.class);
+        job.setCombinerClass(WCReducerCombiner.class); //
+        job.setReducerClass(WCReducerCombiner.class);
+        job.setOutputKeyClass(Text.class);
+        job.setOutputValueClass(IntWritable.class);
+        job.setNumReduceTasks(Integer.parseInt(args[0]));
+        FileInputFormat.addInputPath(job, new Path(args[1]));
+        FileOutputFormat.setOutputPath(job, new Path(args[2]));
+        System.exit(job.waitForCompletion(true) ? 0 : 1);
 
 		return job.waitForCompletion(true) ? 0 : 1; // this will execute the job
 	}
