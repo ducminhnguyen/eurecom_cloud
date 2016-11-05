@@ -18,7 +18,13 @@ public class TextPair implements WritableComparable<TextPair> {
 
     // add the pair objects as TextPair fields
     public Text first;
+    public Text getFirst() {
+        return this.first;
+    }
     public Text second;
+    public Text getSecond() {
+        return this.second;
+    }
 
     public TextPair() {
         // implement the constructor, empty constructor MUST be implemented for deserialization
