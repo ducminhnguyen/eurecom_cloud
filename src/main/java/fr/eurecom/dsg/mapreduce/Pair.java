@@ -45,7 +45,7 @@ public class Pair extends Configured implements Tool {
 
         Configuration conf = this.getConf();
         // define new job
-        Job job = new Job(conf, "word-co-occurrences");
+        Job job = new Job(conf, "word-co-occurrences pair");
         // set job input format
         job.setInputFormatClass(TextInputFormat.class);
         // set map class and the map output key and value classes

@@ -38,7 +38,7 @@ public class Stripes extends Configured implements Tool {
         job.setMapOutputValueClass(StringToIntMapWritable.class);
         job.setMapOutputKeyClass(Text.class);
         // set reduce class and the reduce output key and value classes
-        job.setCombinerClass(StripesReducer.class);
+        //job.setCombinerClass(StripesReducer.class);
         job.setReducerClass(StripesReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(StringToIntMapWritable.class);

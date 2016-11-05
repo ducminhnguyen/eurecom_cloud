@@ -47,7 +47,7 @@ public class WordCountIMC extends Configured implements Tool {
         // TODO: set the number of reducers. This is optional and by default is 1
         // TODO: set the jar class
 
-        job = Job.getInstance(conf, "word count");
+        job = Job.getInstance(conf, "word count IMC");
         job.setJarByClass(WordCount.class);
         job.setMapperClass(WCIMCMapper.class);
 
