@@ -1,4 +1,4 @@
-for i in `seq 1 10`;
-do
-	./runHadoop ./target/WordCount-1.0-SNAPSHOT.jar WordCount 3 /laboratory/gutenberg_big.txt output_$i >> WordCount_out.txt
-done
+./runHadoop ./target/WordCount-1.0-SNAPSHOT.jar WordCount 3 /laboratory/gutenberg_big.txt output_$i >> WordCount_out.txt
+NAME = WordCountIMC
+./runHadoop ./target/WordCount-1.0-SNAPSHOT.jar $NAME 3 /laboratory/gutenberg_big.txt output_$i >> $(NAME)_out.txt
+./runHadoop ./target/WordCount-1.0-SNAPSHOT.jar WordCountCombiner 3 /laboratory/gutenberg_big.txt output_$i >> WordCountCombiner_out.txt

@@ -1,0 +1,4 @@
+for i in `seq 3 8`;
+do
+	./runHadoop ./target/WordCount-1.0-SNAPSHOT.jar WordCount $i /laboratory/gutenberg_big.txt output_reducer_$i
+done
