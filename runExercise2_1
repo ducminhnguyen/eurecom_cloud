@@ -1,0 +1,4 @@
+for i in `seq 1 10`;
+do
+	./runHadoop ./target/WordCount-1.0-SNAPSHOT.jar WordCount 3 /laboratory/gutenberg_big.txt output_$i >> WordCount_out.txt
+done
