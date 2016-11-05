@@ -1,0 +1,1 @@
+hadoop jar $1 fr.eurecom.dsg.mapreduce.$2 $3 $4 $5
