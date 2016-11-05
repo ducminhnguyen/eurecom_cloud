@@ -85,6 +85,10 @@ class WCIMCMapper extends Mapper<Object, // TODO: change Object to input key
 
     private Text word = new Text();
     private IntWritable result;
+    static HashMap<String, Integer> counter;
+    static {
+        counter = new HashMap<String, Integer>();
+    }
     @Override
     protected void map(Object key, // TODO: change Object to input key type
                        Text value, // TODO: change Object to input value type
@@ -93,7 +97,7 @@ class WCIMCMapper extends Mapper<Object, // TODO: change Object to input key
         // * TODO: implement the map method (use context.write to emit results). Use
         // the in-memory combiner technique
         StringTokenizer itr = new StringTokenizer(value.toString());
-        HashMap<String, Integer> counter = new HashMap<String, Integer>();
+
         while (itr.hasMoreTokens()) {
             //word.set(itr.nextToken());
             //context.write(word, one);
@@ -104,6 +108,17 @@ class WCIMCMapper extends Mapper<Object, // TODO: change Object to input key
                 counter.put(cur, 1);
             }
         }
+//        Iterator it = counter.entrySet().iterator();
+//        while (it.hasNext()) {
+//            Map.Entry pair = (Map.Entry)it.next();
+//            word.set((String)pair.getKey());
+//            result = new IntWritable((Integer)pair.getValue());
+//            context.write(word, result);
+//        }
+    }
+    @Override
+    protected void cleanup(Context context
+    ) throws IOException, InterruptedException {
         Iterator it = counter.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
