@@ -11,6 +11,7 @@ import java.util.StringTokenizer;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
@@ -78,8 +79,9 @@ public class DistributedCacheJoin extends Configured implements Tool {
         job.setNumReduceTasks(numReducers);
         // TODO: set the jar class
         job.setJarByClass(DistributedCacheJoin.class);
-        System.console().printf(inputTinyFile.toUri().getRawPath());
-        DistributedCache.addCacheFile(inputTinyFile.toUri(), getConf());
+        System.console().printf(inputTinyFile.getFileSystem(getConf()).getUri().getRawPath());
+
+        DistributedCache.addCacheFile(inputTinyFile.getFileSystem(getConf()).getUri(), getConf());
         //job.addCacheFile(inputTinyFile.toUri());
 
 
