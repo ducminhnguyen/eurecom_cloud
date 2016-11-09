@@ -50,7 +50,7 @@ public class DistributedCacheJoin extends Configured implements Tool {
     @Override
     public int run(String[] args) throws Exception {
         Configuration conf = getConf();
-
+        DistributedCache.addCacheFile(new URI(inputTinyFile), getConf());
         // TODO: add the smallFile to the distributed cache
 
         Job job = Job.getInstance(conf); // TODO: define new job instead of null using conf e setting
@@ -79,7 +79,6 @@ public class DistributedCacheJoin extends Configured implements Tool {
         job.setNumReduceTasks(numReducers);
         // TODO: set the jar class
         job.setJarByClass(DistributedCacheJoin.class);
-        DistributedCache.addCacheFile(new URI(inputTinyFile), getConf());
         //job.addCacheFile(inputTinyFile.toUri());
 
 
@@ -106,7 +105,7 @@ class DCJMapper extends Mapper<Object, Text, Text, IntWritable>  {
     @Override
     public void setup(Context context) throws IOException, InterruptedException {
         _conf = context.getConfiguration();
-        URI[] uris = context.getCacheFiles();
+        URI[] uris = DistributedCache.getCacheFiles(context.getConfiguration());;
         System.console().printf(uris[0].getRawPath());
         for(URI uri : uris){
             Path path = new Path(uri.getPath());
