@@ -106,7 +106,6 @@ class DCJMapper extends Mapper<Object, Text, Text, IntWritable>  {
     public void setup(Context context) throws IOException, InterruptedException {
         _conf = context.getConfiguration();
         URI[] uris = DistributedCache.getCacheFiles(context.getConfiguration());;
-        System.console().printf(uris[0].getRawPath());
         for(URI uri : uris){
             Path path = new Path(uri.getPath());
             String fileName = path.getName();
