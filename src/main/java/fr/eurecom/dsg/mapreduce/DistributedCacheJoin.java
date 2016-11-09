@@ -43,7 +43,7 @@ public class DistributedCacheJoin extends Configured implements Tool {
         this.inputTinyFile = new Path(args[2]);
         this.inputFile = new Path(args[1]);
         this.outputDir = new Path(args[3]);
-        System.console().printf(inputTinyFile.toUri().getRawPath());
+        //System.console().printf(inputTinyFile.toUri().getRawPath());
     }
 
     @Override
@@ -78,6 +78,7 @@ public class DistributedCacheJoin extends Configured implements Tool {
         job.setNumReduceTasks(numReducers);
         // TODO: set the jar class
         job.setJarByClass(DistributedCacheJoin.class);
+        System.console().printf(inputTinyFile.toUri().getRawPath());
         DistributedCache.addCacheFile(inputTinyFile.toUri(), getConf());
         //job.addCacheFile(inputTinyFile.toUri());
 
