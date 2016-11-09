@@ -43,6 +43,7 @@ public class DistributedCacheJoin extends Configured implements Tool {
         this.inputTinyFile = new Path(args[2]);
         this.inputFile = new Path(args[1]);
         this.outputDir = new Path(args[3]);
+        System.console().printf(inputTinyFile.getName());
     }
 
     @Override
@@ -105,7 +106,6 @@ class DCJMapper extends Mapper<Object, Text, Text, IntWritable>  {
     public void setup(Context context) throws IOException, InterruptedException {
         _conf = context.getConfiguration();
         URI[] uris = DistributedCache.getCacheFiles(_conf);
-        System.console().printf(uris.toString());
         for(URI uri : uris){
             Path path = new Path(uri.getPath());
             String fileName = path.getName();
