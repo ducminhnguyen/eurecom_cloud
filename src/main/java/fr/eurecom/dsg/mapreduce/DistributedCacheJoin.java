@@ -13,8 +13,6 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -26,7 +24,7 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.apache.hadoop.filecache.DistributedCache;
-import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.mapreduce.MRJobConfig;
 
 public class DistributedCacheJoin extends Configured implements Tool {
 
@@ -79,9 +77,9 @@ public class DistributedCacheJoin extends Configured implements Tool {
         job.setNumReduceTasks(numReducers);
         // TODO: set the jar class
         job.setJarByClass(DistributedCacheJoin.class);
-        //DistributedCache.addCacheFile(inputTinyFile.toUri(), conf);
-        job.addCacheFile(inputTinyFile.toUri());
-
+        DistributedCache.addCacheFile(inputTinyFile.toUri(), conf);
+        //job.addCacheFile(inputTinyFile.toUri());
+        
 
         return job.waitForCompletion(true) ? 0 : 1;
     }
@@ -96,7 +94,7 @@ public class DistributedCacheJoin extends Configured implements Tool {
 
 
 // TODO: implement mapper
-class DCJMapper extends Mapper<Object, Text, Text, IntWritable> {
+class DCJMapper extends Mapper<Object, Text, Text, IntWritable>  {
     private Configuration _conf;
     private BufferedReader _reader;
     private HashSet<String> _wordsToSkip = new HashSet<String>();
@@ -106,7 +104,7 @@ class DCJMapper extends Mapper<Object, Text, Text, IntWritable> {
     @Override
     public void setup(Context context) throws IOException, InterruptedException {
         _conf = context.getConfiguration();
-        URI[] uris = Job.getInstance(_conf).getCacheFiles();
+        URI[] uris = DistributedCache.getCacheFiles(context.getConfiguration());
         for(URI uri : uris){
             Path path = new Path(uri.getPath());
             String fileName = path.getName();
