@@ -79,8 +79,8 @@ public class DistributedCacheJoin extends Configured implements Tool {
         job.setNumReduceTasks(numReducers);
         // TODO: set the jar class
         job.setJarByClass(DistributedCacheJoin.class);
-        DistributedCache.addCacheFile(inputTinyFile.toUri(), conf);
-        //job.addCacheFile(inputTinyFile.toUri());
+        //DistributedCache.addCacheFile(inputTinyFile.toUri(), conf);
+        job.addCacheFile(inputTinyFile.toUri());
 
 
         return job.waitForCompletion(true) ? 0 : 1;
