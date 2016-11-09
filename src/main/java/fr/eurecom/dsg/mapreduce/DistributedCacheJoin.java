@@ -40,8 +40,8 @@ public class DistributedCacheJoin extends Configured implements Tool {
             System.exit(0);
         }
         this.numReducers = Integer.parseInt(args[0]);
-        this.inputTinyFile = new Path(args[1]);
-        this.inputFile = new Path(args[2]);
+        this.inputTinyFile = new Path(args[2]);
+        this.inputFile = new Path(args[1]);
         this.outputDir = new Path(args[3]);
     }
 
@@ -79,7 +79,7 @@ public class DistributedCacheJoin extends Configured implements Tool {
         job.setJarByClass(DistributedCacheJoin.class);
         DistributedCache.addCacheFile(inputTinyFile.toUri(), conf);
         //job.addCacheFile(inputTinyFile.toUri());
-        
+
 
         return job.waitForCompletion(true) ? 0 : 1;
     }
