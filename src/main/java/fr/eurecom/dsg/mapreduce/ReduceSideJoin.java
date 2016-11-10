@@ -72,7 +72,7 @@ public class ReduceSideJoin extends Configured implements Tool {
 
 }
 
-class ReduceSideJoinMapper extends Mapper<Object, Text, DoubleWritable, DoubleWritable> {
+class ReduceSideJoinMapper extends Mapper<Object, Text, Text, DoubleWritable> {
     public ReduceSideJoinMapper(){
         super();
     }
@@ -82,12 +82,12 @@ class ReduceSideJoinMapper extends Mapper<Object, Text, DoubleWritable, DoubleWr
         StringTokenizer stringTokenizer = new StringTokenizer(value.toString());
         DoubleWritable first = new DoubleWritable(Double.parseDouble(stringTokenizer.nextToken()));
         DoubleWritable second = new DoubleWritable(Double.parseDouble(stringTokenizer.nextToken()));
-        context.write(first, second);
-        context.write(second, first);
+        context.write(new Text(first.toString()), second);
+        context.write(new Text(second.toString()), first);
     }
 }
 
-class ReduceSideJoinReducer extends Reducer<DoubleWritable, DoubleWritable, DoubleWritable, DoubleWritable> {
+class ReduceSideJoinReducer extends Reducer<Text, DoubleWritable, DoubleWritable, DoubleWritable> {
 
     @Override
     public void reduce(DoubleWritable key, Iterable<DoubleWritable> values, Context context) throws IOException, InterruptedException{
