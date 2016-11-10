@@ -73,9 +73,7 @@ public class ReduceSideJoin extends Configured implements Tool {
 
 class ReduceSideJoinMapper extends Mapper<Object, Text, IntWritable, IntWritable> {
 
-    public ReduceSideJoinMapper() {
 
-    }
     @Override
     public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
         StringTokenizer stringTokenizer = new StringTokenizer(value.toString());
@@ -87,9 +85,7 @@ class ReduceSideJoinMapper extends Mapper<Object, Text, IntWritable, IntWritable
 }
 
 class ReduceSideJoinReducer extends Reducer<IntWritable, IntWritable, IntWritable, IntWritable> {
-    public ReduceSideJoinReducer() {
-
-    }
+    
     @Override
     public void reduce(IntWritable key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException{
         HashSet<IntWritable> result = new HashSet<>();
