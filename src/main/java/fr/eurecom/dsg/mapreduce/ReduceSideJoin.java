@@ -3,6 +3,7 @@ package fr.eurecom.dsg.mapreduce;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.ArrayWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
@@ -72,7 +73,7 @@ public class ReduceSideJoin extends Configured implements Tool {
     }
 
 
-    public static class ReduceSideJoinMapper extends Mapper<Object, Text, IntWritable, HashSet<IntWritable>> {
+    public static class ReduceSideJoinMapper extends Mapper<Object, Text, IntWritable, IntWritable> {
 
         public ReduceSideJoinMapper() {
 
@@ -82,23 +83,20 @@ public class ReduceSideJoin extends Configured implements Tool {
             StringTokenizer stringTokenizer = new StringTokenizer(value.toString());
             IntWritable first = new IntWritable(Integer.parseInt(stringTokenizer.nextToken()));
             IntWritable second = new IntWritable(Integer.parseInt(stringTokenizer.nextToken()));
-            HashSet<IntWritable> firstList = new HashSet<>(), secondList = new HashSet<>();
-            firstList.add(second);
-            secondList.add(first);
-            context.write(first, firstList);
-            context.write(second, secondList);
+            context.write(first, second);
+            context.write(second, first);
         }
     }
 
-    public static class ReduceSideJoinReducer extends Reducer<IntWritable, HashSet<IntWritable>, IntWritable, IntWritable> {
+    public static class ReduceSideJoinReducer extends Reducer<IntWritable, IntWritable, IntWritable, IntWritable> {
         public ReduceSideJoinReducer() {
 
         }
         @Override
-        public void reduce(IntWritable key, Iterable<HashSet<IntWritable>> values, Context context) throws IOException, InterruptedException{
+        public void reduce(IntWritable key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException{
             HashSet<IntWritable> result = new HashSet<>();
-            for (HashSet<IntWritable> value : values) {
-                result.addAll(value);
+            for (IntWritable value : values) {
+                result.add(value);
             }
 
             IntWritable[] temp = (IntWritable[]) result.toArray();
