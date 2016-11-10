@@ -39,8 +39,8 @@ public class ReduceSideJoin extends Configured implements Tool {
         job.setMapOutputValueClass(IntWritable.class);
 
         job.setReducerClass(ReduceSideJoinReducer.class);
-        job.setOutputKeyClass(DoubleWritable.class);
-        job.setOutputValueClass(DoubleWritable.class);
+        job.setOutputKeyClass(IntWritable.class);
+        job.setOutputValueClass(IntWritable.class);
 
         //job.setOutputFormatClass(FileOutputFormat.class);
         FileInputFormat.addInputPath(job, inputPath);
@@ -84,16 +84,16 @@ class ReduceSideJoinMapper extends Mapper<Object, Text, Text, IntWritable> {
     }
 }
 
-class ReduceSideJoinReducer extends Reducer<Text, DoubleWritable, DoubleWritable, DoubleWritable> {
+class ReduceSideJoinReducer extends Reducer<Text, IntWritable, IntWritable, IntWritable> {
 
     @Override
-    public void reduce(Text key, Iterable<DoubleWritable> values, Context context) throws IOException, InterruptedException{
-        HashSet<DoubleWritable> result = new HashSet<>();
-        for (DoubleWritable value : values) {
+    public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException{
+        HashSet<IntWritable> result = new HashSet<>();
+        for (IntWritable value : values) {
             result.add(value);
         }
 
-        DoubleWritable[] temp = (DoubleWritable[]) result.toArray();
+        IntWritable[] temp = (IntWritable[]) result.toArray();
         for (int i = 0 ; i < temp.length - 1; ++i) {
             for (int j = i + 1; j< temp.length;++j) {
                 context.write(temp[i], temp[j]);
