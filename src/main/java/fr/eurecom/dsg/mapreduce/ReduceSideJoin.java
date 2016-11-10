@@ -93,7 +93,7 @@ class ReduceSideJoinReducer extends Reducer<Text, IntWritable, IntWritable, IntW
             result.add(value);
         }
 
-        IntWritable[] temp = (IntWritable[]) result.toArray();
+        IntWritable[] temp =  result.toArray(new IntWritable[result.size()]);
         for (int i = 0 ; i < temp.length - 1; ++i) {
             for (int j = i + 1; j< temp.length;++j) {
                 context.write(temp[i], temp[j]);
