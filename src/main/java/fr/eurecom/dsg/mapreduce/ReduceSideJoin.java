@@ -37,11 +37,11 @@ public class ReduceSideJoin extends Configured implements Tool {
         Job job = Job.getInstance(conf, "ReduceSideJoin-Duc-Ha");
         job.setInputFormatClass(TextInputFormat.class);
 
-        job.setMapperClass(ReduceSideJoin.ReduceSideJoinMapper.class);
+        job.setMapperClass(ReduceSideJoinMapper.class);
         job.setMapOutputKeyClass(IntWritable.class);
         job.setMapOutputValueClass(HashSet.class);
 
-        job.setReducerClass(ReduceSideJoin.ReduceSideJoinReducer.class);
+        job.setReducerClass(ReduceSideJoinReducer.class);
         job.setOutputKeyClass(IntWritable.class);
         job.setOutputValueClass(IntWritable.class);
 
@@ -52,8 +52,6 @@ public class ReduceSideJoin extends Configured implements Tool {
         job.setJarByClass(ReduceSideJoin.class);
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
-
-        return job.waitForCompletion(true) ? 0 : 1; // TODO: implement all the job components andconfigurations
     }
 
     public ReduceSideJoin(String[] args) {
@@ -73,37 +71,39 @@ public class ReduceSideJoin extends Configured implements Tool {
     }
 
 
-    public static class ReduceSideJoinMapper extends Mapper<Object, Text, IntWritable, IntWritable> {
 
-        public ReduceSideJoinMapper() {
+}
 
-        }
-        @Override
-        public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
-            StringTokenizer stringTokenizer = new StringTokenizer(value.toString());
-            IntWritable first = new IntWritable(Integer.parseInt(stringTokenizer.nextToken()));
-            IntWritable second = new IntWritable(Integer.parseInt(stringTokenizer.nextToken()));
-            context.write(first, second);
-            context.write(second, first);
-        }
+class ReduceSideJoinMapper extends Mapper<Object, Text, IntWritable, IntWritable> {
+
+    public ReduceSideJoinMapper() {
+
     }
+    @Override
+    public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+        StringTokenizer stringTokenizer = new StringTokenizer(value.toString());
+        IntWritable first = new IntWritable(Integer.parseInt(stringTokenizer.nextToken()));
+        IntWritable second = new IntWritable(Integer.parseInt(stringTokenizer.nextToken()));
+        context.write(first, second);
+        context.write(second, first);
+    }
+}
 
-    public static class ReduceSideJoinReducer extends Reducer<IntWritable, IntWritable, IntWritable, IntWritable> {
-        public ReduceSideJoinReducer() {
+class ReduceSideJoinReducer extends Reducer<IntWritable, IntWritable, IntWritable, IntWritable> {
+    public ReduceSideJoinReducer() {
 
+    }
+    @Override
+    public void reduce(IntWritable key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException{
+        HashSet<IntWritable> result = new HashSet<>();
+        for (IntWritable value : values) {
+            result.add(value);
         }
-        @Override
-        public void reduce(IntWritable key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException{
-            HashSet<IntWritable> result = new HashSet<>();
-            for (IntWritable value : values) {
-                result.add(value);
-            }
 
-            IntWritable[] temp = (IntWritable[]) result.toArray();
-            for (int i = 0 ; i < temp.length - 1; ++i) {
-                for (int j = i + 1; j< temp.length;++j) {
-                    context.write(temp[i], temp[j]);
-                }
+        IntWritable[] temp = (IntWritable[]) result.toArray();
+        for (int i = 0 ; i < temp.length - 1; ++i) {
+            for (int j = i + 1; j< temp.length;++j) {
+                context.write(temp[i], temp[j]);
             }
         }
     }
