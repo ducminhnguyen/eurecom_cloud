@@ -36,11 +36,11 @@ public class ReduceSideJoin extends Configured implements Tool {
         Job job = Job.getInstance(conf, "ReduceSideJoin-Duc-Ha");
         job.setInputFormatClass(TextInputFormat.class);
 
-        job.setMapperClass(ReduceSideJoinMapper.class);
+        job.setMapperClass(ReduceSideJoin.ReduceSideJoinMapper.class);
         job.setMapOutputKeyClass(IntWritable.class);
         job.setMapOutputValueClass(HashSet.class);
 
-        job.setReducerClass(ReduceSideJoinReducer.class);
+        job.setReducerClass(ReduceSideJoin.ReduceSideJoinReducer.class);
         job.setOutputKeyClass(IntWritable.class);
         job.setOutputValueClass(IntWritable.class);
 
@@ -72,7 +72,8 @@ public class ReduceSideJoin extends Configured implements Tool {
     }
 
 
-    public class ReduceSideJoinMapper extends Mapper<Object, Text, IntWritable, HashSet<IntWritable>> {
+    public static class ReduceSideJoinMapper extends Mapper<Object, Text, IntWritable, HashSet<IntWritable>> {
+
         public ReduceSideJoinMapper() {
 
         }
@@ -89,7 +90,7 @@ public class ReduceSideJoin extends Configured implements Tool {
         }
     }
 
-    public class ReduceSideJoinReducer extends Reducer<IntWritable, HashSet<IntWritable>, IntWritable, IntWritable> {
+    public static class ReduceSideJoinReducer extends Reducer<IntWritable, HashSet<IntWritable>, IntWritable, IntWritable> {
         public ReduceSideJoinReducer() {
 
         }
