@@ -90,7 +90,7 @@ class ReduceSideJoinMapper extends Mapper<Object, Text, Text, DoubleWritable> {
 class ReduceSideJoinReducer extends Reducer<Text, DoubleWritable, DoubleWritable, DoubleWritable> {
 
     @Override
-    public void reduce(DoubleWritable key, Iterable<DoubleWritable> values, Context context) throws IOException, InterruptedException{
+    public void reduce(Text key, Iterable<DoubleWritable> values, Context context) throws IOException, InterruptedException{
         HashSet<DoubleWritable> result = new HashSet<>();
         for (DoubleWritable value : values) {
             result.add(value);
