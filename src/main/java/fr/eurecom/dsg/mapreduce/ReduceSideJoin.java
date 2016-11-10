@@ -52,6 +52,7 @@ public class ReduceSideJoin extends Configured implements Tool {
         job.setJarByClass(ReduceSideJoin.class);
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
+        return 0;
     }
 
     public ReduceSideJoin(String[] args) {
