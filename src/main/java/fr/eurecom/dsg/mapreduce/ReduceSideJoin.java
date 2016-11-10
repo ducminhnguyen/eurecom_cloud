@@ -16,6 +16,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
+import org.apache.log4j.net.SyslogAppender;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -31,6 +32,7 @@ public class ReduceSideJoin extends Configured implements Tool {
 
     @Override
     public int run(String[] args) throws Exception {
+        System.console().printf("Here");
         Configuration conf = getConf();
         Job job = Job.getInstance(conf);
         job.setInputFormatClass(TextInputFormat.class);
@@ -57,6 +59,7 @@ public class ReduceSideJoin extends Configured implements Tool {
             System.out.println("Usage: ReduceSideJoin <num_reducers> <input_file> <output_dir>");
             System.exit(0);
         }
+
         this.numReducers = Integer.parseInt(args[0]);
         this.inputPath = new Path(args[1]);
         this.outputDir = new Path(args[2]);
