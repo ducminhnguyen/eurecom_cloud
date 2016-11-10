@@ -33,7 +33,7 @@ public class ReduceSideJoin extends Configured implements Tool {
     @Override
     public int run(String[] args) throws Exception {
         Configuration conf = getConf();
-        Job job = Job.getInstance(conf);
+        Job job = Job.getInstance(conf, "ReduceSideJoin-Duc-Ha");
         job.setInputFormatClass(TextInputFormat.class);
 
         job.setMapperClass(ReduceSideJoinMapper.class);
@@ -73,6 +73,9 @@ public class ReduceSideJoin extends Configured implements Tool {
 
 
     public class ReduceSideJoinMapper extends Mapper<Object, Text, IntWritable, HashSet<IntWritable>> {
+        public ReduceSideJoinMapper() {
+
+        }
         @Override
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
             StringTokenizer stringTokenizer = new StringTokenizer(value.toString());
@@ -87,6 +90,9 @@ public class ReduceSideJoin extends Configured implements Tool {
     }
 
     public class ReduceSideJoinReducer extends Reducer<IntWritable, HashSet<IntWritable>, IntWritable, IntWritable> {
+        public ReduceSideJoinReducer() {
+
+        }
         @Override
         public void reduce(IntWritable key, Iterable<HashSet<IntWritable>> values, Context context) throws IOException, InterruptedException{
             HashSet<IntWritable> result = new HashSet<>();
