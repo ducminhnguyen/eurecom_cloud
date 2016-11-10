@@ -37,17 +37,17 @@ public class ReduceSideJoin extends Configured implements Tool {
 
         job.setMapperClass(ReduceSideJoinMapper.class);
         job.setMapOutputKeyClass(IntWritable.class);
-        job.setMapOutputValueClass(IntWritable.class);
+        job.setMapOutputValueClass(HashSet.class);
 
         job.setReducerClass(ReduceSideJoinReducer.class);
         job.setOutputKeyClass(IntWritable.class);
-        job.setOutputValueClass(Text.class);
+        job.setOutputValueClass(IntWritable.class);
 
         job.setOutputFormatClass(TextOutputFormat.class);
         FileInputFormat.addInputPath(job, inputPath);
         FileOutputFormat.setOutputPath(job, outputDir);
         job.setNumReduceTasks(numReducers);
-        job.setJarByClass(DistributedCacheJoin.class);
+        job.setJarByClass(ReduceSideJoin.class);
 
         return 0; // TODO: implement all the job components andconfigurations
     }
