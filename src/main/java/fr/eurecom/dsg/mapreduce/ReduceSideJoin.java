@@ -35,7 +35,7 @@ public class ReduceSideJoin extends Configured implements Tool {
     public int run(String[] args) throws Exception {
         Configuration conf = getConf();
         Job job = Job.getInstance(conf, "ReduceSideJoin-Duc-Ha");
-        job.setInputFormatClass(TextInputFormat.class);
+        job.setInputFormatClass(FileInputFormat.class);
 
         job.setMapperClass(ReduceSideJoinMapper.class);
         job.setMapOutputKeyClass(IntWritable.class);
@@ -45,7 +45,7 @@ public class ReduceSideJoin extends Configured implements Tool {
         job.setOutputKeyClass(IntWritable.class);
         job.setOutputValueClass(IntWritable.class);
 
-        job.setOutputFormatClass(TextOutputFormat.class);
+        job.setOutputFormatClass(FileOutputFormat.class);
         FileInputFormat.addInputPath(job, inputPath);
         FileOutputFormat.setOutputPath(job, outputDir);
         job.setNumReduceTasks(numReducers);
