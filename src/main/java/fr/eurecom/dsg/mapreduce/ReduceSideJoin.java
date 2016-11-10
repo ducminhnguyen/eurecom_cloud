@@ -32,7 +32,6 @@ public class ReduceSideJoin extends Configured implements Tool {
 
     @Override
     public int run(String[] args) throws Exception {
-        System.console().printf("Here");
         Configuration conf = getConf();
         Job job = Job.getInstance(conf);
         job.setInputFormatClass(TextInputFormat.class);
@@ -51,7 +50,9 @@ public class ReduceSideJoin extends Configured implements Tool {
         job.setNumReduceTasks(numReducers);
         job.setJarByClass(ReduceSideJoin.class);
 
-        return 0; // TODO: implement all the job components andconfigurations
+        System.exit(job.waitForCompletion(true) ? 0 : 1);
+
+        return job.waitForCompletion(true) ? 0 : 1; // TODO: implement all the job components andconfigurations
     }
 
     public ReduceSideJoin(String[] args) {
@@ -85,7 +86,7 @@ public class ReduceSideJoin extends Configured implements Tool {
         }
     }
 
-    public class  ReduceSideJoinReducer extends Reducer<IntWritable, HashSet<IntWritable>, IntWritable, IntWritable> {
+    public class ReduceSideJoinReducer extends Reducer<IntWritable, HashSet<IntWritable>, IntWritable, IntWritable> {
         @Override
         public void reduce(IntWritable key, Iterable<HashSet<IntWritable>> values, Context context) throws IOException, InterruptedException{
             HashSet<IntWritable> result = new HashSet<>();
