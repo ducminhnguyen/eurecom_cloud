@@ -3,25 +3,21 @@ package fr.eurecom.dsg.mapreduce;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.ArrayWritable;
+
 import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.LongWritable;
+
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
-import org.apache.log4j.net.SyslogAppender;
+
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 
@@ -35,7 +31,7 @@ public class ReduceSideJoin extends Configured implements Tool {
     public int run(String[] args) throws Exception {
         Configuration conf = getConf();
         Job job = Job.getInstance(conf, "ReduceSideJoin-Duc-Ha");
-        job.setInputFormatClass(FileInputFormat.class);
+        //job.setInputFormatClass(FileInputFormat.class);
 
         job.setMapperClass(ReduceSideJoinMapper.class);
         job.setMapOutputKeyClass(IntWritable.class);
@@ -45,7 +41,7 @@ public class ReduceSideJoin extends Configured implements Tool {
         job.setOutputKeyClass(IntWritable.class);
         job.setOutputValueClass(IntWritable.class);
 
-        job.setOutputFormatClass(FileOutputFormat.class);
+        //job.setOutputFormatClass(FileOutputFormat.class);
         FileInputFormat.addInputPath(job, inputPath);
         FileOutputFormat.setOutputPath(job, outputDir);
         job.setNumReduceTasks(numReducers);
