@@ -4,6 +4,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
 
+import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.IntWritable;
 
 import org.apache.hadoop.io.Text;
@@ -71,29 +72,31 @@ public class ReduceSideJoin extends Configured implements Tool {
 
 }
 
-class ReduceSideJoinMapper extends Mapper<Object, Text, IntWritable, IntWritable> {
-
+class ReduceSideJoinMapper extends Mapper<Object, Text, DoubleWritable, DoubleWritable> {
+    public ReduceSideJoinMapper(){
+        super();
+    }
 
     @Override
     public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
         StringTokenizer stringTokenizer = new StringTokenizer(value.toString());
-        IntWritable first = new IntWritable(Integer.parseInt(stringTokenizer.nextToken()));
-        IntWritable second = new IntWritable(Integer.parseInt(stringTokenizer.nextToken()));
+        DoubleWritable first = new DoubleWritable(Double.parseDouble(stringTokenizer.nextToken()));
+        DoubleWritable second = new DoubleWritable(Double.parseDouble(stringTokenizer.nextToken()));
         context.write(first, second);
         context.write(second, first);
     }
 }
 
-class ReduceSideJoinReducer extends Reducer<IntWritable, IntWritable, IntWritable, IntWritable> {
-    
+class ReduceSideJoinReducer extends Reducer<DoubleWritable, DoubleWritable, DoubleWritable, DoubleWritable> {
+
     @Override
-    public void reduce(IntWritable key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException{
-        HashSet<IntWritable> result = new HashSet<>();
-        for (IntWritable value : values) {
+    public void reduce(DoubleWritable key, Iterable<DoubleWritable> values, Context context) throws IOException, InterruptedException{
+        HashSet<DoubleWritable> result = new HashSet<>();
+        for (DoubleWritable value : values) {
             result.add(value);
         }
 
-        IntWritable[] temp = (IntWritable[]) result.toArray();
+        DoubleWritable[] temp = (DoubleWritable[]) result.toArray();
         for (int i = 0 ; i < temp.length - 1; ++i) {
             for (int j = i + 1; j< temp.length;++j) {
                 context.write(temp[i], temp[j]);
